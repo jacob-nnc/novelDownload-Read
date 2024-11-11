@@ -1,0 +1,76 @@
+<head>
+    <meta charset="{{ charset }}">
+    <style>
+        {% include 'XS.css' %}
+    </style>
+    <link rel="prefetch" href="./{{ next_link }}">
+</head>
+<body>
+    <div class="content fontlarge">
+        <h2 style="text-align: center;">
+            {{ title }}
+        </h2>
+        {{ content | safe}}
+    </div>
+    {%
+        include 'nav.html'
+    %}
+    <script>
+        let ishide=true;
+        const element =document.querySelector(".content");
+
+        element.addEventListener('click',function(){
+            // 获取 :root 元素
+            const root = document.documentElement;
+            if(ishide)
+            {
+                document.querySelector("#nav-container").style.display=""; 
+                document.documentElement.style.setProperty("--W",'10%');
+            }
+            else{
+                document.querySelector("#nav-container").style.display="none";
+                document.documentElement.style.setProperty("--W",'0px');
+            }
+            ishide=!ishide;
+        });
+
+        let startX, startY, endX, endY;
+
+
+        element.addEventListener('touchstart', (event) => {
+            const touch = event.touches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
+        });
+
+        element.addEventListener('touchend', (event) => {
+            const touch = event.changedTouches[0];
+            endX = touch.clientX;
+            endY = touch.clientY;
+
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                let k=Math.abs(deltaX)/Math.abs(deltaY);
+                if (deltaX > 0) {
+                    console.log('滑动向右');
+                    if(k>3){
+                        document.querySelector("#previous").click();
+                    }
+                } else {
+                    console.log('滑动向左');
+                    if(k>3){
+                        document.querySelector("#next").click();
+                    }
+                }
+            } else {
+                if (deltaY > 0) {
+                    console.log('滑动向下');
+                } else {
+                    console.log('滑动向上');
+                }
+            }
+        });
+    </script>
+</body>

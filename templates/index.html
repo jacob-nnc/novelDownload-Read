@@ -1,0 +1,103 @@
+<head>
+    <style>
+        {% include 'XS.css' %}
+        :root{
+            --W:10%;
+        }
+    </style>
+
+    {% if isContent%}
+    {% else %}
+    {% for img_path in images %}
+    <link rel="preload" href="{{ img_path }}" as="image">
+    {% endfor %}
+    {% endif %}
+</head>
+<body>
+    <h1> {{ title }}</h1>
+    <div class="{% if isContent%}chapter{% endif %}">
+        <ul>
+            {% for book in books %}
+            <li class="list-li {{ book[1] }}"
+                onclick="window.location.href='{{ book[2] }}'"> {{book[0]}}
+
+                <span class="btn" style="display: none;">
+                    <div class="remove">删除</div>
+                    <div class="rename">重命名</div>
+                </span>
+            </li>
+            {% endfor%}
+        </ul>
+        
+    </div>
+
+    {% if isContent%}
+    {% include 'nav1.html' %}
+    {% endif %}
+    <script>
+        try{
+            document.querySelector(".prev").scrollIntoView({behavior:"smooth"})}
+        catch{}
+        {% if isContent%}
+        {% else %}
+        let startX, threshold;
+        let startY;
+        function removeBook(bookId) {
+            fetch(`/remove/${bookId}`, {
+                method: 'GET',
+            })
+           location.href = location.pathname + '?t=' + new Date().getTime();
+        }
+
+        function renameBook(bookId) {
+            const newName = prompt("请输入新的书名:");
+            if (newName) {
+                fetch(`/rename/${bookId}/${newName}`, {
+                    method: 'GET',
+                })
+            }
+            location.href = location.pathname + '?t=' + new Date().getTime();
+
+        }
+
+        window.onload=function(){
+            threshold=0.1*window.innerWidth;
+            let btn=document.getElementById("btn");
+            let lis=document.querySelectorAll(".list-li");
+
+            for(let i=0;i<lis.length;i++){
+                lis[i].addEventListener("touchstart",function(e){
+                    startX = e.touches[0].clientX; // 记录起始触摸点
+                    startY = e.touches[0].clientY; // 记录起始触摸点
+                })
+                lis[i].addEventListener("touchmove",function(e){
+                    const currentX = e.touches[0].clientX; // 当前触摸点
+                    const currentY = e.touches[0].clientY; // 当前触摸点
+                    const deltaX = currentX - startX; // 计算位移
+                    const deltaY = currentY - startY; // 计算位移
+                    if(Math.abs(deltaX)<Math.abs(deltaY)*2)return;
+                    // 如果位移超过阈值，进行判断
+                    if (Math.abs(deltaX) > threshold) {
+                        if (deltaX < 0) {
+                            console.log("左划大于10%");
+                            lis[i].querySelector(".btn").style.display="flex";
+                        } else {
+                            lis[i].querySelector(".btn").style.display="none";
+                            console.log("右滑大于10%");
+                        }
+                    }
+                })
+                lis[i].querySelector(".remove").addEventListener("click",function(e){
+                    e.stopPropagation(); // 阻止默认行为
+                    removeBook(i);
+                })
+
+                lis[i].querySelector(".rename").addEventListener("click",function(e){
+                    e.stopPropagation(); // 阻止默认行为
+                    renameBook(i)
+                })
+            }
+        }
+        {% endif %}
+    </script>
+</body>

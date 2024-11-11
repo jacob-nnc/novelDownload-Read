@@ -1,0 +1,142 @@
+:root {
+    --size: 2;
+    /* 定义字体大小变量 */
+    --W: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f8f9fa;
+    color: #333;
+    width: 100%;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    font-size: 2.5em;
+    margin: 20px 0;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+li {
+    padding: 15px 20px;
+    background-color: #fff;
+    border-bottom: 2px solid #ddd;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+    /* 保证内边距不超出屏幕 */
+}
+
+li:hover {
+    background-color: #e9ecef;
+}
+
+#nav-container {
+    position: fixed;
+    width: var(--W);
+    height: 100%;
+    top: 10px;
+    left: 1px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: lightgrey;
+}
+
+.chapter{
+    max-width: calc(100% - var(--W) - 20px);
+    margin: 5px;
+    padding-left: calc(var(--W) + 5px);
+}
+
+.content {
+    max-width: calc(100% - var(--W) - 20px);
+    margin: 5px;
+    padding-left: calc( var(--W) + 5px);
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 1.6em;
+    line-height: 1.6em;
+    word-wrap: break-word;
+}
+
+.nav-button {
+    height: 35%;
+    /* 上下各占一半 */
+    background-color: white;
+    text-align: center;
+    margin: 2px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    /* 垂直居中 */
+    justify-content: center;
+    /* 水平居中 */
+}
+
+#home {
+    height: 10%;
+}
+
+#directory {
+    height: 20%;
+    /* 目录占用20% */
+}
+
+.nav-button:hover {
+    background-color: #dcdcdc;
+    /* 悬停变色 */
+}
+
+.nav-button:active {
+    background-color: #c0c0c0;
+    /* 点击时变色 */
+}
+
+li.prev {
+    background-color: #a0dbff;
+}
+
+.nav-link {
+    font-size: 1.6em;
+    color: #007bff;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+}
+
+@media screen and (max-device-width: 480px) {
+    body {
+        -webkit-text-size-adjust: none;
+    }
+
+    .fontlarge {
+        font-size: 42px;
+    }
+
+    img {
+        height: 36px;
+        width: 36px;
+    }
+
+    ul {
+        font-size: 3em;
+        /* 列表项字体放大 */
+    }
+}
